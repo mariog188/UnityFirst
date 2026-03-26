@@ -6,10 +6,16 @@ public class Player : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
 
+    [Header("Movement details")]
     private float xinput;
     private bool facingright = true;
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 8;
+
+    [Header("Collision details")]
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;
+    private bool isGrounded;
 
     private void Awake()
     {
@@ -20,12 +26,13 @@ public class Player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        HandleCollision();
         HandleInput();
         HandleMovement();
         HandleAnimation();
@@ -54,7 +61,10 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
     }
 
     private void HandleFLip()
@@ -73,5 +83,16 @@ public class Player : MonoBehaviour
     {
         transform.Rotate(0, 180, 0);
         facingright = !facingright;
+    }
+
+    private void HandleCollision()
+    {
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+    }
+
+    // This is not neccesary. This only draws the collision line
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, groundCheckDistance));
     }
 }
