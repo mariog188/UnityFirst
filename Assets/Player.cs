@@ -7,15 +7,18 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
 
     [Header("Movement details")]
-    private float xinput;
-    private bool facingright = true;
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 8;
+    private float xinput;
+    private bool facingright = true;
+    private bool canMove = true;
+    private bool canJump = true;
 
     [Header("Collision details")]
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
+
 
     private void Awake()
     {
@@ -39,6 +42,12 @@ public class Player : MonoBehaviour
         HandleFLip();
     }
 
+    public void EnableJumpAndMovement(bool enable)
+    {
+        canJump = enable;
+        canMove = enable;
+    }
+
     private void HandleAnimation()
     {
         animator.SetBool("isGrounded", isGrounded);
@@ -53,16 +62,35 @@ public class Player : MonoBehaviour
         {
             Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            TryToAttack();
+        }
+    }
+
+    private void TryToAttack()
+    {
+        if (isGrounded) 
+        {
+            animator.SetTrigger("attack");
+        }
     }
 
     private void HandleMovement()
     {
-        rb.linearVelocity = new Vector2(xinput * moveSpeed, rb.linearVelocityY);
+        if (canMove)
+        {
+            rb.linearVelocity = new Vector2(xinput * moveSpeed, rb.linearVelocityY);
+        } else 
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
     }
 
     private void Jump()
     {
-        if (isGrounded)
+        if (isGrounded && canJump)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
