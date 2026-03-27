@@ -41,8 +41,9 @@ public class Player : MonoBehaviour
 
     private void HandleAnimation()
     {
-        bool isMoving = rb.linearVelocity.x != 0;
-        animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("xVelocity", rb.linearVelocity.x);
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     private void HandleInput()
