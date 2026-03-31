@@ -2,22 +2,23 @@ using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Entity : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody2D rb;
+    protected Animator animator;
+    protected Rigidbody2D rb;
 
     [Header("Attack details")]
-    [SerializeField] private float attackRadius;
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private LayerMask whatIsEnemy;
+    [SerializeField] protected float attackRadius;
+    [SerializeField] protected Transform attackPoint;
+    [SerializeField] protected LayerMask whatIsTarget;
 
     [Header("Movement details")]
-    [SerializeField] private float moveSpeed = 8f;
+    [SerializeField] protected float moveSpeed = 8f;
     [SerializeField] private float jumpForce = 8;
+    protected bool canMove = true;
+    protected int facingDir = 1;
     private float xinput;
-    private bool facingright = true;
-    private bool canMove = true;
+    private bool facingright = true;  
     private bool canJump = true;
 
     [Header("Collision details")]
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         HandleCollision();
         HandleInput();
@@ -48,21 +49,28 @@ public class Player : MonoBehaviour
         HandleFLip();
     }
 
-    public void DamageEnemies()
+    public void DamageTargets()
     {
-        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
+        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsTarget);
         foreach (var enemy in enemyColliders)
         {
-            enemy.GetComponent<Enemy>().TakeDamage();
+            Entity entityTarget = enemy.GetComponent<Entity>();
+            entityTarget.TakeDamage();
         }
     }
+
+    private void TakeDamage()
+    {
+        throw new NotImplementedException();
+    }
+
     public void EnableJumpAndMovement(bool enable)
     {
         canJump = enable;
         canMove = enable;
     }
 
-    private void HandleAnimation()
+    protected void HandleAnimation()
     {
         animator.SetBool("isGrounded", isGrounded);
         animator.SetFloat("xVelocity", rb.linearVelocity.x);
@@ -74,16 +82,16 @@ public class Player : MonoBehaviour
         xinput = Input.GetAxisRaw("Horizontal");
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Jump();
+            TryToJump();
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            TryToAttack();
+            HandleAttack();
         }
     }
 
-    private void TryToAttack()
+    protected virtual void HandleAttack()
     {
         if (isGrounded) 
         {
@@ -91,7 +99,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HandleMovement()
+    protected virtual void HandleMovement()
     {
         if (canMove)
         {
@@ -102,7 +110,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void TryToJump()
     {
         if (isGrounded && canJump)
         {
@@ -110,7 +118,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HandleFLip()
+    protected void HandleFLip()
     {
         if (rb.linearVelocity.x > 0 && !facingright)
         {
@@ -126,9 +134,10 @@ public class Player : MonoBehaviour
     {
         transform.Rotate(0, 180, 0);
         facingright = !facingright;
+        facingDir = facingDir = -1;
     }
 
-    private void HandleCollision()
+    protected virtual void HandleCollision()
     {
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }

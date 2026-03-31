@@ -1,35 +1,42 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
-    private SpriteRenderer spriteRenderer;
+    private bool playerDetected;
 
-    private float redColorDuration = 2;
-    public float timer;
-
-    private void Awake()
+    protected override void Update()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        HandleCollision();
+        HandleMovement();
+        HandleAnimation();
+        HandleFLip();
+        HandleAttack();
     }
 
-    private void Update()
+    protected override void HandleAttack()
     {
-        timer = timer - Time.deltaTime;
-        
-        if(timer < 0 && spriteRenderer.color != Color.white)
+        if (playerDetected)
         {
-            spriteRenderer.color = Color.white;
+            animator.SetTrigger("attack");
         }
     }
 
-    public void TakeDamage()
+    protected override void HandleMovement()
     {
-        spriteRenderer.color = Color.red;
-        timer = redColorDuration;
+        if (canMove)
+        {
+            rb.linearVelocity = new Vector2(facingDir * moveSpeed, rb.linearVelocityY);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
     }
 
-    private void TurnWhite()
+    protected override void HandleCollision()
     {
-        spriteRenderer.color = Color.white;
+        base.HandleCollision();
+        playerDetected = Physics2D.OverlapCircle(attackPoint.position, attackRadius, whatIsTarget);
     }
 }
