@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -7,10 +8,14 @@ public class Entity : MonoBehaviour
     protected Animator animator;
     protected Rigidbody2D rb;
     protected Collider2D collider2D;
+    protected SpriteRenderer spriteRenderer;
 
     [Header("Health")]
     [SerializeField] private int maxHealth = 1;
     [SerializeField] private int currentHealth;
+    [SerializeField] private Material damageMaterial;
+    [SerializeField] private float damageFeedbackDuration = .1f;
+    private Coroutine damageFeedbackCoroutine;
 
     [Header("Attack details")]
     [SerializeField] protected float attackRadius;
@@ -36,6 +41,7 @@ public class Entity : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
         currentHealth = maxHealth;
     }
@@ -69,10 +75,32 @@ public class Entity : MonoBehaviour
     private void TakeDamage()
     {
         currentHealth = currentHealth - 1;
+
+        PlayDamageFeedback();
+
         if (currentHealth <= 0)
         {
             Die();
         }
+    }
+
+    private void PlayDamageFeedback()
+    {
+        if (damageFeedbackCoroutine != null)
+        {
+            StopCoroutine(DamageFeedbackCoroutine());
+        }            
+        StartCoroutine(DamageFeedbackCoroutine());
+    }
+
+    private IEnumerator DamageFeedbackCoroutine()
+    {
+        Material originalMaterial = spriteRenderer.material;
+        spriteRenderer.material = damageMaterial;
+
+        yield return new WaitForSeconds(damageFeedbackDuration);
+
+        spriteRenderer.material = originalMaterial;
     }
 
     protected virtual void Die()
