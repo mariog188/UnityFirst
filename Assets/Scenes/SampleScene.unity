@@ -636,6 +636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01650801ddab0c44af43aa9dd2bc12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  maxHealth: 1
+  currentHealth: 0
   attackRadius: 1.14
   attackPoint: {fileID: 1498164133}
   whatIsTarget:
@@ -803,6 +805,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cb8fced15c09e046b19dc81a0ca3869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  maxHealth: 10
+  currentHealth: 0
   attackRadius: 0.8
   attackPoint: {fileID: 1173183332}
   whatIsTarget:
