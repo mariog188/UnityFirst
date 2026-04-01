@@ -28,7 +28,7 @@ public class Entity : MonoBehaviour
     protected bool canMove = true;
     protected int facingDir = 1;
     private float xinput;
-    private bool facingright = true;  
+    protected bool facingright = true;  
     private bool canJump = true;
 
     [Header("Collision details")]
@@ -166,7 +166,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    protected void HandleFLip()
+    protected virtual void HandleFLip()
     {
         if (rb.linearVelocity.x > 0 && !facingright)
         {
@@ -178,7 +178,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    private void Flip()
+    protected void Flip()
     {
         transform.Rotate(0, 180, 0);
         facingright = !facingright;
@@ -194,6 +194,9 @@ public class Entity : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, groundCheckDistance));
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        if (attackPoint != null)
+        {
+            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        }  
     }
 }

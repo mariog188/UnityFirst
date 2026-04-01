@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Enemy.cs" />
+    <Compile Include="Assets\ObjectToProtect.cs" />
     <Compile Include="Assets\Entity_AnimationEvents.cs" />
     <Compile Include="Assets\Entity.cs" />
   </ItemGroup>
