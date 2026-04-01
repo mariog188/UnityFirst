@@ -22,22 +22,18 @@ public class Entity : MonoBehaviour
     [SerializeField] protected Transform attackPoint;
     [SerializeField] protected LayerMask whatIsTarget;
 
-    [Header("Movement details")]
-    [SerializeField] protected float moveSpeed = 8f;
-    [SerializeField] private float jumpForce = 8;
-    protected bool canMove = true;
-    protected int facingDir = 1;
-    private float xinput;
-    protected bool facingright = true;  
-    private bool canJump = true;
-
     [Header("Collision details")]
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
-    private bool isGrounded;
+    protected bool isGrounded;
+
+    // Facing direction details
+    protected bool canMove = true;
+    protected int facingDir = 1;
+    protected bool facingright = true;
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
@@ -56,7 +52,6 @@ public class Entity : MonoBehaviour
     protected virtual void Update()
     {
         HandleCollision();
-        HandleInput();
         HandleMovement();
         HandleAnimation();
         HandleFLip();
@@ -109,12 +104,11 @@ public class Entity : MonoBehaviour
         collider2D.enabled = false;
         rb.gravityScale = 12;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 15);
-
+        Destroy(gameObject,3);
     }
 
-    public void EnableJumpAndMovement(bool enable)
+    public virtual void EnableMovement(bool enable)
     {
-        canJump = enable;
         canMove = enable;
     }
 
@@ -123,20 +117,6 @@ public class Entity : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
         animator.SetFloat("xVelocity", rb.linearVelocity.x);
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
-    }
-
-    private void HandleInput()
-    {
-        xinput = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TryToJump();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            HandleAttack();
-        }
     }
 
     protected virtual void HandleAttack()
@@ -149,21 +129,6 @@ public class Entity : MonoBehaviour
 
     protected virtual void HandleMovement()
     {
-        if (canMove)
-        {
-            rb.linearVelocity = new Vector2(xinput * moveSpeed, rb.linearVelocityY);
-        } else 
-        {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-        }
-    }
-
-    private void TryToJump()
-    {
-        if (isGrounded && canJump)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        }
     }
 
     protected virtual void HandleFLip()

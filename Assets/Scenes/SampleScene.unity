@@ -871,12 +871,11 @@ MonoBehaviour:
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 2
-  jumpForce: 8
   groundCheckDistance: 1.2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  moveSpeed: 2
 --- !u!4 &719471605
 Transform:
   m_ObjectHideFlags: 0
@@ -968,8 +967,8 @@ GameObject:
   m_Component:
   - component: {fileID: 842531927}
   - component: {fileID: 842531925}
-  - component: {fileID: 842531928}
   - component: {fileID: 842531929}
+  - component: {fileID: 842531930}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -1021,33 +1020,6 @@ Transform:
   - {fileID: 1173183332}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &842531928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 842531923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cb8fced15c09e046b19dc81a0ca3869, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
-  maxHealth: 10
-  currentHealth: 0
-  damageMaterial: {fileID: 2100000, guid: 883e8b5c52b292c4db69b2b8238f1d5d, type: 2}
-  damageFeedbackDuration: 0.2
-  attackRadius: 0.8
-  attackPoint: {fileID: 1173183332}
-  whatIsTarget:
-    serializedVersion: 2
-    m_Bits: 128
-  moveSpeed: 8
-  jumpForce: 12
-  groundCheckDistance: 1.4
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!70 &842531929
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1085,6 +1057,33 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.3}
   m_Size: {x: 0.86026144, y: 2.1240146}
   m_Direction: 0
+--- !u!114 &842531930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842531923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27491c5b13b2ec84fbfd35e64847fb57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+  maxHealth: 10
+  currentHealth: 0
+  damageMaterial: {fileID: 2100000, guid: 883e8b5c52b292c4db69b2b8238f1d5d, type: 2}
+  damageFeedbackDuration: 0.1
+  attackRadius: 1
+  attackPoint: {fileID: 1173183332}
+  whatIsTarget:
+    serializedVersion: 2
+    m_Bits: 128
+  groundCheckDistance: 1.45
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  moveSpeed: 8
+  jumpForce: 12
 --- !u!1 &891312864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1874,13 +1873,10 @@ MonoBehaviour:
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 0
-  moveSpeed: 8
-  jumpForce: 8
   groundCheckDistance: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 0
-  player: {fileID: 842531927}
 --- !u!1 &1493766973
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class ObjectToProtect : Entity
 {
-    [Header("Details")]
-    [SerializeField] private Transform player;
+     private Transform player;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        player = FindAnyObjectByType<Player>().transform;
+    }
 
     protected override void Update()
     {
@@ -12,6 +17,10 @@ public class ObjectToProtect : Entity
 
     protected override void HandleFLip()
     {
+        if ( player == null)
+        {
+            return;
+        }
         if (player.transform.position.x > transform.position.x && !facingright)
         {
             Flip();

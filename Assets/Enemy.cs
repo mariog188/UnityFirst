@@ -4,13 +4,12 @@ using UnityEngine.Windows;
 public class Enemy : Entity
 {
     private bool playerDetected;
+    [Header("Movement details")]
+    [SerializeField] protected float moveSpeed = 8f;
 
     protected override void Update()
     {
-        HandleCollision();
-        HandleMovement();
-        HandleAnimation();
-        HandleFLip();
+        base.Update();
         HandleAttack();
     }
 
