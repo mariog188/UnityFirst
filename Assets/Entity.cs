@@ -34,7 +34,7 @@ public class Entity : MonoBehaviour
 
 
     protected virtual void Awake()
-    {
+    {        
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
